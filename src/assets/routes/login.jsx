@@ -125,8 +125,8 @@ const FindPasswordText = styled.span`
 export default function Login() {
   const navigate = useNavigate();
 
-  const REST_API_KEY = "614bbc54d9b7eda0c04fa1458d7973ff";
-  const REDIRECT_URL = 'http://localhost:3000';
+  const REST_API_KEY = "";
+  const REDIRECT_URL = 'http://localhost:8080/api/auth/kakao/callback';
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
   const handleLogin = () => {
     window.location.href = KAKAO_AUTH_URL
@@ -138,7 +138,7 @@ export default function Login() {
     if(code) {
       const KakaoLogin = async () => {
         try{
-          const response = await axios.post('/api/auth/kakao', {
+          const response = await axios.post('http://localhost:8080/api/auth/kakao', {
             code: code,
           });
 
