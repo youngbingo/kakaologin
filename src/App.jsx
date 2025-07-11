@@ -17,7 +17,7 @@ const router = createBrowserRouter([
       }
     ]
   }
-]);
+], { basename: "/kakaologin/" });
 
 const GlobalStyles = createGlobalStyle`
   ${reset};

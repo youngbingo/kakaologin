@@ -1,199 +1,177 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 
+// --- 기본 컨테이너 ---
 const Wrapper = styled.div`
-    margin-top: 181px;
-    margin-left: 512px;
-    height: 662px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    width: 417px;
-    padding: 10px;
-    gap: 10px;
+  margin: 5vh auto;
+  width: 90%;
+  max-width: 417px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem; /* 10px */
 `;
 
+// --- 제목 ---
 const TitleFrame = styled.div`
-    flex-direction: row;
-    display: flex;
-    height: 164px;
-    width: 397px;
-    padding-top: 70px;
-    padding-bottom: 70px;
-    gap: 10px;
-`
+  padding: 5rem 0; /* 50px */
+`;
 
 const Title = styled.h1`
-    font-size: 32px;
-    font-weight: 800;
+  font-size: 3.2rem; /* 32px */
+  font-weight: 800;
 `;
 
-const Text = styled.h2`
-    font-size: 24px;
-    font-weight: 600;
-`;
-
+// --- 폼 요소 ---
 const Form = styled.form`
-    flex-direction: column;
-    display: flex;
-    height: 192px;
-    width: 397px;
-    gap: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* 20px */
 `;
 
 const FormFrame = styled.div`
-  flex-direction: column;
+  width: 100%;
   display: flex;
-  height: 86px;
-  width: 397px;
-  gap: 10px;
+  flex-direction: column;
+  gap: 1rem; /* 10px */
+`;
+
+const Text = styled.h2`
+  font-size: 2.4rem; /* 24px */
+  font-weight: 600;
 `;
 
 const Input = styled.input`
-  flex-direction: row;
-  display: flex;
-  height: 52px;
-  width: 397px;
-  border-radius: 12px;
+  width: 100%;
+  height: 5.2rem; /* 52px */
+  padding: 1.5rem; /* 15px */
+  border-radius: 1.2rem; /* 12px */
   border: 1px solid #cfd9e8;
-  padding: 15px;
   background-color: #f7fafc;
-  justify-content: center;
-  align-items: center;
+  font-size: 1.6rem;
 
   &::placeholder {
-    font-size: 16px;
+    font-size: 1.6rem;
     font-weight: 400;
     color: #4a709c;
   }
 `;
 
+// --- 버튼 ---
 const LoginFrame = styled.div`
-    flex-direction: column;
-    height: 106px;
-    width: 397px;
-    padding: 30px 0px;
-    gap: 10px;
+  width: 100%;
+  padding: 3rem 0 1rem 0; /* 상단 30px, 하단 10px 패딩 */
 `;
 
 const LoginButton = styled.button`
-  flex-direction: column;
-  height: 46px;
-  width: 397px;
-  border-radius: 12px;
-  border: 0px;
+  width: 100%;
+  height: 4.6rem;
+  border-radius: 1.2rem;
+  border: none;
   background-color: #0d78f2;
+  display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `;
 
 const LoginText = styled.span`
-  width: 42px;
-  height: 24px;
-  font-size: 16px;
+  font-size: 1.6rem;
   font-weight: 600;
-
   color: white;
 `;
 
 const KakaoLoginFrame = styled.div`
-  flex-direction: column;
-  height: 106px;
-  width: 397px;
-  padding-top: 70px;
-  gap: 10px;
+  width: 100%;
 `;
 
 const KakaoLoginButton = styled.button`
-  flex-direction: column;
-  height: 46px;
-  width: 397px;
-  border-radius: 12px;
-  border: 0px;
+  width: 100%;
+  height: 4.6rem;
+  border-radius: 1.2rem;
+  border: none;
   background-color: #fee500;
-  justify-content: center;
-  align-items: center;
-`;
-
-const KakaoLoginText = styled.span`
-  width: 127px;
-  height: 24px;
-  font-size: 16px;
-  font-weight: 600;
-
-  color: #000000;
-`;
-
-const FindPasswordFrame = styled.div`
-  flex-direction: row;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 24px;
-  width: 397px;
-  gap: 10px;
+  cursor: pointer;
+`;
+
+const KakaoLoginText = styled.span`
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #000000;
+`;
+
+// --- 비밀번호 찾기 ---
+const FindPasswordFrame = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
 `;
 
 const FindPasswordText = styled.span`
-  height: 24px;
-  width: 128px;
-  font-size: 16px;
+  font-size: 1.6rem;
   font-weight: 400;
   color: #4a709c;
+  cursor: pointer;
 `;
 
 export default function Login() {
-  const [isLoading, setLoading] = useState(false);
-  const [name, setName] = useState(""); 
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); 
-  const onChange = (e) => {
-    const {target: {name, value}} = e;
-    if(name === "아이디"){
-        setName(value);
-    } else if (name === "비밀번호"){
-        setPassword(value);
-    }
-  }; 
+  const navigate = useNavigate();
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    try {
-      // 로그인
-      // 로그인 성공 페이지로 보내기
-    } catch(e) {
-      // setError
-    } finally {
-        setLoading(false);
+  const REST_API_KEY = "614bbc54d9b7eda0c04fa1458d7973ff";
+  const REDIRECT_URL = 'http://localhost:3000';
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
+  const handleLogin = () => {
+    window.location.href = KAKAO_AUTH_URL
+  }
+
+  useEffect(() => {
+    const code = new URL(window.location.href).searchParams.get("code");
+
+    if(code) {
+      const KakaoLogin = async () => {
+        try{
+          const response = await axios.post('/api/auth/kakao', {
+            code: code,
+          });
+
+          const accessToken = response.data.accessToken;
+          localStorage.setItem('accessToken', accessToken);
+
+          navigate('/');
+        } catch {
+          console.error("카카오 로그인 실패", error);
+          navigate('/');
+        }
+      };
+
+      KakaoLogin();
     }
-  };
+  }, [navigate]);
 
   return (
     <Wrapper>
       <TitleFrame>
         <Title>9roomthonUNIV_4th_UOU</Title>
       </TitleFrame>
-      <Form onSubmit={onSubmit}>
+      <Form>
         <FormFrame>
           <Text>아이디</Text>
-          <Input
-            onChange={onChange}
-            name="아이디"
-            value={name}
-            placeholder="아이디를 입력하세요."
-            type="text"
-            required
-          />
+          <Input name="아이디" placeholder="아이디를 입력하세요." type="text" />
         </FormFrame>
         <FormFrame>
           <Text>비밀번호</Text>
           <Input
-            onChange={onChange}
             name="비밀번호"
-            value={password}
             placeholder="비밀번호를 입력하세요."
             type="password"
-            required
           />
         </FormFrame>
       </Form>
@@ -203,7 +181,7 @@ export default function Login() {
         </LoginButton>
       </LoginFrame>
       <KakaoLoginFrame>
-        <KakaoLoginButton type="submit">
+        <KakaoLoginButton onClick={handleLogin}>
           <KakaoLoginText>Login With Kakao</KakaoLoginText>
         </KakaoLoginButton>
       </KakaoLoginFrame>
