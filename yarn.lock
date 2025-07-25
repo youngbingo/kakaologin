@@ -429,6 +429,13 @@
   resolved "https://registry.yarnpkg.com/@swc/counter/-/counter-0.1.3.tgz#cc7463bd02949611c6329596fccd2b0ec782b0e9"
   integrity sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==
 
+"@swc/plugin-styled-components@^9.0.0":
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/@swc/plugin-styled-components/-/plugin-styled-components-9.0.0.tgz#ab1492245a831919409a25cbd93017d3e1f0d385"
+  integrity sha512-B1GHBUnk1jFMyYcCpkWoN6AmB9EbMe13AZ34K2cLpO+0sKRR4v/oCuXvorUG8HQPCikaItq43nsHsVjZSF/BCQ==
+  dependencies:
+    "@swc/counter" "^0.1.3"
+
 "@swc/types@^0.1.23":
   version "0.1.23"
   resolved "https://registry.yarnpkg.com/@swc/types/-/types-0.1.23.tgz#7eabf88b9cfd929253859c562ae95982ee04b4e8"

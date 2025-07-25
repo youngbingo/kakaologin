@@ -3,7 +3,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 
+const REST_API_KEY = "";
+const REDIRECT_URL = "http://localhost:8080/api/auth/kakao/callback";
+const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
+
 // --- 기본 컨테이너 ---
+/* rem 단위는 따로 초기화하지않고 브라우저 기본인 16px = 1rem을 사용하였습니다 */
 const Wrapper = styled.div`
   margin: 5vh auto;
   width: 90%;
@@ -11,16 +16,16 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem; /* 10px */
+  gap: 1rem; 
 `;
 
 // --- 제목 ---
 const TitleFrame = styled.div`
-  padding: 5rem 0; /* 50px */
+  padding: 5rem 0;
 `;
 
 const Title = styled.h1`
-  font-size: 3.2rem; /* 32px */
+  font-size: 3.2rem;
   font-weight: 800;
 `;
 
@@ -29,26 +34,26 @@ const Form = styled.form`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 2rem; /* 20px */
+  gap: 2rem; 
 `;
 
 const FormFrame = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1rem; /* 10px */
+  gap: 1rem; 
 `;
 
 const Text = styled.h2`
-  font-size: 2.4rem; /* 24px */
+  font-size: 2.4rem;
   font-weight: 600;
 `;
 
 const Input = styled.input`
   width: 100%;
-  height: 5.2rem; /* 52px */
-  padding: 1.5rem; /* 15px */
-  border-radius: 1.2rem; /* 12px */
+  height: 5.2rem; 
+  padding: 1.5rem;
+  border-radius: 1.2rem; 
   border: 1px solid #cfd9e8;
   background-color: #f7fafc;
   font-size: 1.6rem;
@@ -61,21 +66,26 @@ const Input = styled.input`
 `;
 
 // --- 버튼 ---
-const LoginFrame = styled.div`
-  width: 100%;
-  padding: 3rem 0 1rem 0; /* 상단 30px, 하단 10px 패딩 */
-`;
-
-const LoginButton = styled.button`
+const Button = styled.button`
   width: 100%;
   height: 4.6rem;
   border-radius: 1.2rem;
   border: none;
-  background-color: #0d78f2;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  font-size: 1.6rem;
+  font-weight: 600;
+`;
+
+const LoginFrame = styled.div`
+  width: 100%;
+  padding: 3rem 0 1rem 0; 
+`;
+
+const LoginButton = styled(Button)`
+  background-color: #0d78f2;
 `;
 
 const LoginText = styled.span`
@@ -88,16 +98,8 @@ const KakaoLoginFrame = styled.div`
   width: 100%;
 `;
 
-const KakaoLoginButton = styled.button`
-  width: 100%;
-  height: 4.6rem;
-  border-radius: 1.2rem;
-  border: none;
+const KakaoLoginButton = styled(Button)`
   background-color: #fee500;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
 `;
 
 const KakaoLoginText = styled.span`
@@ -125,9 +127,6 @@ const FindPasswordText = styled.span`
 export default function Login() {
   const navigate = useNavigate();
 
-  const REST_API_KEY = "";
-  const REDIRECT_URL = 'http://localhost:8080/api/auth/kakao/callback';
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
   const handleLogin = () => {
     window.location.href = KAKAO_AUTH_URL
   }
@@ -145,8 +144,8 @@ export default function Login() {
           const accessToken = response.data.accessToken;
           localStorage.setItem('accessToken', accessToken);
 
-          navigate('/');
-        } catch {
+          navigate('/main');
+        } catch (error) {
           console.error("카카오 로그인 실패", error);
           navigate('/');
         }
@@ -181,7 +180,7 @@ export default function Login() {
         </LoginButton>
       </LoginFrame>
       <KakaoLoginFrame>
-        <KakaoLoginButton onClick={handleLogin}>
+        <KakaoLoginButton type="button" onClick={handleLogin}>
           <KakaoLoginText>Login With Kakao</KakaoLoginText>
         </KakaoLoginButton>
       </KakaoLoginFrame>
