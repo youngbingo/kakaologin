@@ -128,7 +128,7 @@ export default function Main() {
 
     alert("로그아웃되었습니다.");
 
-    navigate("/login");
+    navigate("/");
   }
 
   return (

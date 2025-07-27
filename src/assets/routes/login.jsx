@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 
 const REST_API_KEY = "";
-const REDIRECT_URL = "http://localhost:8080/api/auth/kakao/callback";
+const REDIRECT_URL = "http://localhost:3000/api/auth/kakao/callback";
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
 
 // --- 기본 컨테이너 ---
@@ -144,7 +144,7 @@ export default function Login() {
           const accessToken = response.data.accessToken;
           localStorage.setItem('accessToken', accessToken);
 
-          navigate('/main');
+          navigate("main");
         } catch (error) {
           console.error("카카오 로그인 실패", error);
           navigate('/');
